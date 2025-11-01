@@ -110,13 +110,18 @@ auth_andd_autho_2/
 
 ## 🗄️ Database Configuration
 
-### Local MongoDB
-The app is configured to use local MongoDB by default:
-- Connection: `mongodb://127.0.0.1:27017/authtestapp`
-- Database: `authtestapp`
-- Collections: `users`, `notes`, `activities`
+### ⚠️ Important: Database Setup Required
 
-### MongoDB Atlas (Cloud)
+**For Local Development:**
+- Install MongoDB locally
+- Run MongoDB on `127.0.0.1:27017`
+- Current connection: `mongodb://127.0.0.1:27017/authtestapp`
+
+**For Production/Sharing:**
+- Local MongoDB won't work on deployed platforms
+- Use **MongoDB Atlas** (Free tier available)
+
+### MongoDB Atlas (Recommended for Production)
 To use MongoDB Atlas:
 
 1. Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
