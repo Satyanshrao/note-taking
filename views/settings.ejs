@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Settings</title>
+    <style>
+        * {
+            transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="flex justify-between items-center mb-6 fade-in">
+            <h1 class="text-4xl text-white font-bold">
+                <i class="fas fa-cog mr-3"></i>Settings
+            </h1>
+            <a href="/dashboard" class="px-5 py-3 glass rounded-xl text-white hover:bg-white/20 transition">
+                <i class="fas fa-arrow-left mr-2"></i>Back
+            </a>
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="mb-4 p-4 glass border-l-4 border-red-500 rounded-lg fade-in">
+                <p class="text-red-100"><i class="fas fa-exclamation-circle mr-2"></i><%= error %></p>
+            </div>
+        <% } %>
+
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="mb-4 p-4 glass border-l-4 border-green-500 rounded-lg fade-in">
+                <p class="text-green-100"><i class="fas fa-check-circle mr-2"></i><%= message %></p>
+            </div>
+        <% } %>
+
+        <div class="glass rounded-2xl p-8 fade-in">
+            <form action="/settings" method="post" class="space-y-6">
+                <div>
+                    <label class="text-white text-lg font-semibold mb-3 block flex items-center">
+                        <i class="fas fa-palette mr-2"></i>Theme
+                    </label>
+                    <select name="theme" class="w-full rounded-xl bg-white/10 px-4 py-3 text-white border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm">
+                        <option value="dark" <%= user.theme === 'dark' ? 'selected' : '' %>>🌙 Dark</option>
+                        <option value="light" <%= user.theme === 'light' ? 'selected' : '' %>>☀️ Light</option>
+                    </select>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="text-white text-lg font-semibold block flex items-center">
+                        <i class="fas fa-bell mr-2"></i>Notifications
+                    </label>
+                    <label class="flex items-center cursor-pointer p-4 glass rounded-xl hover:bg-white/10 transition">
+                        <input type="checkbox" name="notifications" <%= user.settings && user.settings.notifications ? 'checked' : '' %> class="w-6 h-6 rounded accent-blue-500 cursor-pointer">
+                        <span class="ml-4 text-white">Enable push notifications</span>
+                    </label>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="text-white text-lg font-semibold block flex items-center">
+                        <i class="fas fa-envelope mr-2"></i>Email Updates
+                    </label>
+                    <label class="flex items-center cursor-pointer p-4 glass rounded-xl hover:bg-white/10 transition">
+                        <input type="checkbox" name="emailUpdates" <%= user.settings && user.settings.emailUpdates ? 'checked' : '' %> class="w-6 h-6 rounded accent-blue-500 cursor-pointer">
+                        <span class="ml-4 text-white">Receive email updates and notifications</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full px-4 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-semibold text-lg transition shadow-lg">
+                    <i class="fas fa-save mr-2"></i>Save Settings
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

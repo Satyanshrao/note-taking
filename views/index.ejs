@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Welcome - Notes App</title>
+    <style>
+        * {
+            transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tab-button {
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .tab-button.active {
+            color: #60a5fa;
+        }
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        .input-field {
+            transition: all 0.3s;
+        }
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .notification {
+            animation: slideDown 0.5s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-md">
+            <!-- Logo/Header -->
+            <div class="text-center mb-8">
+                <div class="inline-block p-4 bg-white/20 rounded-full mb-4 backdrop-blur-lg">
+                    <i class="fas fa-sticky-note text-4xl text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-2">Notes App</h1>
+                <p class="text-white/80">Organize your thoughts, ideas, and memories</p>
+            </div>
+
+            <!-- Main Card -->
+            <div class="glass rounded-2xl p-8 shadow-2xl">
+                <!-- Navigation Tabs -->
+                <div class="flex gap-4 mb-8 border-b border-white/20">
+                    <button onclick="switchTab('signup')" id="signup-tab" class="tab-button active px-4 py-3 text-white font-semibold text-lg">
+                        <i class="fas fa-user-plus mr-2"></i>Sign Up
+                    </button>
+                    <button onclick="switchTab('login')" id="login-tab" class="tab-button px-4 py-3 text-white font-semibold text-lg">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </button>
+                </div>
+
+                <!-- Error Message -->
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="notification mb-4 p-4 bg-red-500/20 border-l-4 border-red-500 rounded-lg backdrop-blur-sm">
+                        <p class="text-red-100 text-sm flex items-center">
+                            <i class="fas fa-exclamation-circle mr-2"></i><%= error %>
+                        </p>
+                    </div>
+                <% } %>
+
+                <!-- Success Message -->
+                <% if (typeof message !== 'undefined' && message) { %>
+                    <div class="notification mb-4 p-4 bg-green-500/20 border-l-4 border-green-500 rounded-lg backdrop-blur-sm">
+                        <p class="text-green-100 text-sm flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i><%= message %>
+                        </p>
+                    </div>
+                <% } %>
+
+                <!-- Sign Up Form -->
+                <div id="signup-content" class="tab-content active">
+                    <h2 class="text-2xl text-white mb-6 font-semibold">Create Your Account</h2>
+                    <form action="/create" method="post" class="space-y-5">
+                        <div class="relative">
+                            <i class="fas fa-user absolute left-4 top-4 text-white/60"></i>
+                            <input class="input-field w-full rounded-xl bg-white/10 px-12 py-4 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" 
+                                   type="text" placeholder="Username" name="username" required>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-envelope absolute left-4 top-4 text-white/60"></i>
+                            <input class="input-field w-full rounded-xl bg-white/10 px-12 py-4 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" 
+                                   type="email" placeholder="Email" name="email" required>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-lock absolute left-4 top-4 text-white/60"></i>
+                            <input class="input-field w-full rounded-xl bg-white/10 px-12 py-4 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" 
+                                   type="password" placeholder="Password" name="password" required>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-birthday-cake absolute left-4 top-4 text-white/60"></i>
+                            <input class="input-field w-full rounded-xl bg-white/10 px-12 py-4 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" 
+                                   type="number" placeholder="Age" name="age" required>
+                        </div>
+                        <button class="btn-primary w-full rounded-xl px-4 py-4 text-white font-semibold text-lg" 
+                                type="submit">
+                            <i class="fas fa-rocket mr-2"></i>Create Account
+                        </button>
+                    </form>
+                    <p class="mt-6 text-center text-white/70 text-sm">
+                        <a href="/forgot-password" class="hover:text-white underline">Forgot Password?</a>
+                    </p>
+                </div>
+
+                <!-- Login Form -->
+                <div id="login-content" class="tab-content">
+                    <h2 class="text-2xl text-white mb-6 font-semibold">Welcome Back</h2>
+                    <form action="/login" method="post" class="space-y-5">
+                        <div class="relative">
+                            <i class="fas fa-envelope absolute left-4 top-4 text-white/60"></i>
+                            <input class="input-field w-full rounded-xl bg-white/10 px-12 py-4 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" 
+                                   type="email" placeholder="Email" name="email" required>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-lock absolute left-4 top-4 text-white/60"></i>
+                            <input class="input-field w-full rounded-xl bg-white/10 px-12 py-4 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" 
+                                   type="password" placeholder="Password" name="password" required>
+                        </div>
+                        <button class="btn-primary w-full rounded-xl px-4 py-4 text-white font-semibold text-lg" 
+                                type="submit">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                        </button>
+                    </form>
+                    <p class="mt-6 text-center text-white/70 text-sm">
+                        <a href="/forgot-password" class="hover:text-white underline">Forgot Password?</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <p class="text-center mt-8 text-white/70 text-sm">
+                © 2024 Notes App. Made with <i class="fas fa-heart text-red-400"></i>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.getElementById(tab + '-content').classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+        }
+        
+        // Auto-hide notifications
+        setTimeout(() => {
+            document.querySelectorAll('.notification').forEach(notif => {
+                notif.style.transition = 'opacity 0.5s';
+                notif.style.opacity = '0';
+                setTimeout(() => notif.remove(), 500);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

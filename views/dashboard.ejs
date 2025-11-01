@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Dashboard - Notes App</title>
+    <style>
+        * {
+            transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .card-hover {
+            transition: all 0.3s;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .btn-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        .btn-card:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-4 md:p-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8 fade-in">
+                <div>
+                    <h1 class="text-4xl font-bold text-white mb-2">
+                        <i class="fas fa-user-circle mr-3"></i>Welcome, <%= user.username %>!
+                    </h1>
+                    <p class="text-white/80">Manage your notes and profile</p>
+                </div>
+                <a href="/logout" class="px-6 py-3 bg-red-500/80 hover:bg-red-600 text-white rounded-xl transition backdrop-blur-sm">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            </div>
+
+            <!-- Profile Info Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 fade-in">
+                <div class="glass rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-3">
+                        <div class="p-3 bg-blue-500/30 rounded-lg mr-3">
+                            <i class="fas fa-user text-blue-300 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-white/60 text-sm">Username</p>
+                            <p class="text-white text-lg font-semibold"><%= user.username %></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-3">
+                        <div class="p-3 bg-purple-500/30 rounded-lg mr-3">
+                            <i class="fas fa-envelope text-purple-300 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-white/60 text-sm">Email</p>
+                            <p class="text-white text-lg font-semibold truncate"><%= user.email %></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-3">
+                        <div class="p-3 bg-green-500/30 rounded-lg mr-3">
+                            <i class="fas fa-birthday-cake text-green-300 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-white/60 text-sm">Age</p>
+                            <p class="text-white text-lg font-semibold"><%= user.age %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="glass rounded-2xl p-8 fade-in">
+                <h2 class="text-2xl text-white font-semibold mb-6">
+                    <i class="fas fa-bolt mr-2"></i>Quick Actions
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="/notes" class="btn-card rounded-xl p-6 text-center text-white">
+                        <div class="text-4xl mb-3">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <p class="font-semibold">Notes</p>
+                    </a>
+                    <a href="/profile" class="btn-card rounded-xl p-6 text-center text-white">
+                        <div class="text-4xl mb-3">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <p class="font-semibold">Profile</p>
+                    </a>
+                    <a href="/statistics" class="btn-card rounded-xl p-6 text-center text-white">
+                        <div class="text-4xl mb-3">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <p class="font-semibold">Statistics</p>
+                    </a>
+                    <a href="/settings" class="btn-card rounded-xl p-6 text-center text-white">
+                        <div class="text-4xl mb-3">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <p class="font-semibold">Settings</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Status Message -->
+            <div class="mt-6 text-center">
+                <p class="text-white/70">
+                    <i class="fas fa-check-circle text-green-300 mr-2"></i>
+                    You are successfully logged in! 🎉
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

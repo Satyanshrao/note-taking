@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Statistics</title>
+    <style>
+        * {
+            transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .stat-card {
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-6 fade-in">
+            <h1 class="text-4xl text-white font-bold">
+                <i class="fas fa-chart-bar mr-3"></i>Statistics
+            </h1>
+            <a href="/dashboard" class="px-5 py-3 glass rounded-xl text-white hover:bg-white/20 transition">
+                <i class="fas fa-arrow-left mr-2"></i>Back
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="glass rounded-2xl p-6 stat-card fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-white/60 text-sm mb-2">Total Notes</p>
+                        <p class="text-4xl text-white font-bold"><%= totalNotes || 0 %></p>
+                    </div>
+                    <div class="p-4 bg-blue-500/30 rounded-xl">
+                        <i class="fas fa-sticky-note text-blue-300 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-6 stat-card fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-white/60 text-sm mb-2">Total Words</p>
+                        <p class="text-4xl text-white font-bold"><%= totalWords || 0 %></p>
+                    </div>
+                    <div class="p-4 bg-purple-500/30 rounded-xl">
+                        <i class="fas fa-font text-purple-300 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-6 stat-card fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-white/60 text-sm mb-2">Pinned Notes</p>
+                        <p class="text-4xl text-white font-bold"><%= pinnedNotes || 0 %></p>
+                    </div>
+                    <div class="p-4 bg-yellow-500/30 rounded-xl">
+                        <i class="fas fa-thumbtack text-yellow-300 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass rounded-2xl p-6 stat-card fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-white/60 text-sm mb-2">Archived</p>
+                        <p class="text-4xl text-white font-bold"><%= archivedNotes || 0 %></p>
+                    </div>
+                    <div class="p-4 bg-green-500/30 rounded-xl">
+                        <i class="fas fa-archive text-green-300 text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass rounded-2xl p-6 fade-in">
+                <h2 class="text-2xl text-white font-semibold mb-4">
+                    <i class="fas fa-tags mr-2"></i>Notes by Category
+                </h2>
+                <div class="space-y-3">
+                    <% Object.keys(categories || {}).forEach(cat => { %>
+                        <div class="flex justify-between items-center p-3 bg-white/10 rounded-xl">
+                            <span class="text-white font-medium">
+                                <i class="fas fa-folder mr-2"></i><%= cat %>
+                            </span>
+                            <span class="px-4 py-2 bg-blue-500/30 text-blue-300 font-bold rounded-lg">
+                                <%= categories[cat] %>
+                            </span>
+                        </div>
+                    <% }) %>
+                    <% if (!categories || Object.keys(categories).length === 0) { %>
+                        <p class="text-white/60 text-center py-4">No categories yet</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="glass rounded-2xl p-6 fade-in">
+                <h2 class="text-2xl text-white font-semibold mb-4">
+                    <i class="fas fa-history mr-2"></i>Recent Activity
+                </h2>
+                <div class="space-y-2 max-h-96 overflow-y-auto">
+                    <% (recentActivity || []).forEach(activity => { %>
+                        <div class="flex items-start p-3 bg-white/10 rounded-xl">
+                            <div class="p-2 bg-blue-500/30 rounded-lg mr-3">
+                                <i class="fas fa-circle text-blue-300 text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-white font-medium capitalize">
+                                    <%= activity.action.replace(/_/g, ' ') %>
+                                </p>
+                                <p class="text-white/60 text-xs">
+                                    <%= new Date(activity.createdAt).toLocaleString() %>
+                                </p>
+                            </div>
+                        </div>
+                    <% }) %>
+                    <% if (!recentActivity || recentActivity.length === 0) { %>
+                        <p class="text-white/60 text-center py-4">No recent activity</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

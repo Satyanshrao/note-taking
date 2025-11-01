@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Profile</title>
+    <style>
+        * {
+            transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(96, 165, 250, 0.3);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-6 fade-in">
+            <h1 class="text-4xl text-white font-bold">
+                <i class="fas fa-user-circle mr-3"></i>My Profile
+            </h1>
+            <div class="flex gap-3">
+                <a href="/dashboard" class="px-5 py-3 glass rounded-xl text-white hover:bg-white/20 transition">
+                    <i class="fas fa-home mr-2"></i>Dashboard
+                </a>
+                <a href="/logout" class="px-5 py-3 bg-red-500/80 hover:bg-red-600 text-white rounded-xl transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            </div>
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="mb-4 p-4 glass border-l-4 border-red-500 rounded-lg fade-in">
+                <p class="text-red-100"><i class="fas fa-exclamation-circle mr-2"></i><%= error %></p>
+            </div>
+        <% } %>
+
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="mb-4 p-4 glass border-l-4 border-green-500 rounded-lg fade-in">
+                <p class="text-green-100"><i class="fas fa-check-circle mr-2"></i><%= message %></p>
+            </div>
+        <% } %>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Profile Picture -->
+            <div class="glass rounded-2xl p-6 fade-in">
+                <h2 class="text-2xl text-white font-semibold mb-4">
+                    <i class="fas fa-image mr-2"></i>Profile Picture
+                </h2>
+                <div class="flex flex-col items-center mb-6">
+                    <% if (user.profilePicture) { %>
+                        <img src="<%= user.profilePicture %>" alt="Profile" class="w-32 h-32 rounded-full mb-4 object-cover border-4 border-white/30 shadow-lg">
+                    <% } else { %>
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 mb-4 flex items-center justify-center text-white text-5xl font-bold shadow-lg border-4 border-white/30">
+                            <%= user.username.charAt(0).toUpperCase() %>
+                        </div>
+                    <% } %>
+                    <form action="/profile/picture" method="post" enctype="multipart/form-data" class="w-full">
+                        <input type="file" name="profilePicture" accept="image/*" class="w-full mb-3 text-white/80 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-white/20 file:text-white hover:file:bg-white/30">
+                        <button type="submit" class="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-semibold transition shadow-lg">
+                            <i class="fas fa-upload mr-2"></i>Upload Picture
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit Profile -->
+            <div class="glass rounded-2xl p-6 fade-in">
+                <h2 class="text-2xl text-white font-semibold mb-4">
+                    <i class="fas fa-edit mr-2"></i>Edit Profile
+                </h2>
+                <form action="/profile/update" method="post" class="space-y-4">
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-4 top-4 text-white/60"></i>
+                        <input type="text" name="username" value="<%= user.username %>" placeholder="Username" 
+                               class="input-field w-full rounded-xl bg-white/10 px-12 py-3 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" required>
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-envelope absolute left-4 top-4 text-white/60"></i>
+                        <input type="email" name="email" value="<%= user.email %>" placeholder="Email" 
+                               class="input-field w-full rounded-xl bg-white/10 px-12 py-3 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" required>
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-birthday-cake absolute left-4 top-4 text-white/60"></i>
+                        <input type="number" name="age" value="<%= user.age %>" placeholder="Age" 
+                               class="input-field w-full rounded-xl bg-white/10 px-12 py-3 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" required>
+                    </div>
+                    <button type="submit" class="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-semibold transition shadow-lg">
+                        <i class="fas fa-save mr-2"></i>Update Profile
+                    </button>
+                </form>
+            </div>
+
+            <!-- Change Password -->
+            <div class="glass rounded-2xl p-6 md:col-span-2 fade-in">
+                <h2 class="text-2xl text-white font-semibold mb-4">
+                    <i class="fas fa-lock mr-2"></i>Change Password
+                </h2>
+                <form action="/profile/password" method="post" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="relative">
+                            <i class="fas fa-lock absolute left-4 top-4 text-white/60"></i>
+                            <input type="password" name="currentPassword" placeholder="Current Password" 
+                                   class="input-field w-full rounded-xl bg-white/10 px-12 py-3 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" required>
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-key absolute left-4 top-4 text-white/60"></i>
+                            <input type="password" name="newPassword" placeholder="New Password" 
+                                   class="input-field w-full rounded-xl bg-white/10 px-12 py-3 text-white placeholder-white/60 border-2 border-white/20 outline-none focus:border-white/40 backdrop-blur-sm" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-semibold transition shadow-lg">
+                        <i class="fas fa-save mr-2"></i>Change Password
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
